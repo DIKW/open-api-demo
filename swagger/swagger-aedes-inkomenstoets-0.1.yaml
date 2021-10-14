@@ -1,0 +1,40 @@
+openapi: 3.0.1
+info:
+  title: Inkomenstoets
+  description: API voor AEDES inkomenstoets hackaton
+  version: "0.1"
+servers:
+- url: http://localhost:8080/
+security:
+- Authorization-Header: []
+paths:
+  /huurder/nationale_inkomenstoets/{inkomen_t_min_1}{inkomen_t_min_2}:
+    put:
+      tags:
+      - Toets inkomen nationale toets eisen
+      summary: Toetst inkomen van huurder volgens de geldende nationale toetsingskader
+      operationId: toets
+      parameters:
+      - name: inkomen_t_min_1
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: inkomen_t_min_2
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        200:
+          description: Inkomen getoetst
+          content: {}
+        400:
+          description: Request Failed.
+          content: {}
+components:
+  securitySchemes:
+    Authorization-Header:
+      type: apiKey
+      name: Authorization
+      in: header
