@@ -18,7 +18,7 @@ setup(
     name=NAME,
     version=VERSION,
     description="Inkomenstoets",
-    author_email="",
+    author_email="hugo.koopmans@dikw.com",
     url="",
     keywords=["Swagger", "Inkomenstoets"],
     install_requires=REQUIRES,

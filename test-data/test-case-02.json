@@ -1,0 +1,48 @@
+{
+  "aantalMeeverhuizendeKinderen": 2,
+  "inkomens": [
+    {
+      "aud": "string",
+      "bri": {
+        "inkomens": {
+          "2019": {
+            "grondslag": "string",
+            "inkomen": 10000,
+            "status": "string"
+          },
+          "2020": {
+            "grondslag": "string",
+            "inkomen": 20000,
+            "status": "string"
+          }
+        }
+      },
+      "brp": {
+        "geboortedatum": "19690922",
+        "geslachtsnaam": "Koopmans",
+        "huisletter": "string",
+        "huisnummer": "14",
+        "huisnummerAanduiding": "string",
+        "huisnummerToevoeging": "string",
+        "partnernaam": "string",
+        "postcode": "string",
+        "voornamen": "Hugo",
+        "voorvoegselGeslachtsnaam": "string",
+        "voorvoegselPartnernaam": "string"
+      },
+      "exp": 0,
+      "iat": 0,
+      "iss": "string",
+      "jti": "string",
+      "nbf": 0,
+      "sub": "string",
+      "verklaring": {
+        "authenticatiedienst": "string",
+        "betrouwbaarheidsniveau": "string",
+        "tekst": "string",
+        "tijdstempelAuthenticatie": 0
+      }
+    }
+  ],
+  "kaleHuur": 100
+}
