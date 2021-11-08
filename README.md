@@ -41,6 +41,10 @@ Install requirements
 
     pip3 install -r requirements.txt
     
+Add the requirements for the swagger-ui
+
+    pip3 install connexion[swagger-ui]
+    
 Run flask app, goto folder and run 
 
     python3 -m swagger_server
