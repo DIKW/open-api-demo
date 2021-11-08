@@ -14,3 +14,13 @@ Crafting effective microservices in python [connexion](https://engineering.zalan
 ## Requirements
 
 We need to add swagger-ui-bundle to requirements.txt to make the swagger-ui work
+
+## Howto
+
+Generate server python flask
+Extract folder
+Open visual studio
+Goto extracted folder
+Create virtual environment with 
+
+    python3 -m venv env
