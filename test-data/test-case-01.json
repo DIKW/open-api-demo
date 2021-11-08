@@ -1,5 +1,5 @@
 {
-  "huishouden": {
+    "aantalMeeverhuizendeKinderen": 2,
     "inkomens": [
       {
         "jti": "beb7879ae80b2045830862784f7e1a69",
@@ -44,7 +44,5 @@
         }
       }
     ],
-    "aantalMeeverhuizendeKinderen": 2,
     "KaleHuur": 750
   }
-}

@@ -1,0 +1,203 @@
+openapi: 3.0.1
+info:
+  title: verhuurtoetsen
+  description: API voor AEDES verhuurtoetsen hackaton
+  version: "0.3"
+servers:
+- url: http://localhost:8080/
+security:
+- AuthorizationHeader: []
+paths:
+  /aedes/verhuurtoets/passendheidstoets-met-kale-huur/:
+    post:
+      tags:
+      - Toets inkomen nationale passendsheids toets
+      summary: Toetst inkomen van huurder(s) volgens het geldende nationale toetsingskader
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              #  ----- huishouden zie def onder  -------
+              $ref: '#/components/schemas/Huishouden'
+      responses:
+        200:
+          description: Succesvol toetsresultaat
+          content:
+            application/json:
+              schema:
+                #  ----- toetsResultaat zie def onder  -------
+                $ref: '#/components/schemas/toets-resultaat-met-kale-huur'
+        400:
+          description: Request Failed.
+          content: {}
+  /aedes/verhuurtoets/passendheidstoets-segmenten/:
+    post:
+      tags:
+      - Toets inkomen nationale passendsheids toets
+      summary: Toetst inkomen van huurder(s) volgens het geldende nationale toetsingskader
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              #  ----- huishouden zie def onder  -------
+              $ref: '#/components/schemas/Huishouden'
+      responses:
+        200:
+          description: Succesvol toetsresultaat
+          content:
+            application/json:
+              schema:
+                #  ----- toetsResultaat zie def onder  -------
+                $ref: '#/components/schemas/toets-resultaat-segmenten'
+        400:
+          description: Request Failed.
+          content: {}
+  /aedes/verhuurtoets/locale-bindings-toets/:
+    post:
+      tags:
+      - Toets inkomen nationale passendsheids toets
+      summary: Toetst inkomen van huurder(s) volgens het geldende nationale toetsingskader
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              #  ----- huishouden zie def onder  -------
+              $ref: '#/components/schemas/Huishouden'
+      responses:
+        200:
+          description: Succesvol toetsresultaat
+          content:
+            application/json:
+              schema:
+                #  ----- toetsResultaat zie def onder  -------
+                $ref: '#/components/schemas/toets-resultaat-locale-binding'
+        400:
+          description: Request Failed.
+          content: {}
+components:
+  securitySchemes:
+    AuthorizationHeader:
+      type: apiKey
+      name: Authorization
+      in: header
+  schemas:
+    Huishouden:
+      type: object
+      properties: 
+        inkomens: 
+          type: array
+          items: 
+            type: object
+            properties: 
+              jti: 
+                type: string
+              iat: 
+                type: integer
+                format: int32
+              nbf: 
+                type: integer
+                format: int32
+              exp: 
+                type: integer
+                format: int32
+              iss: 
+                type: string
+              aud: 
+                type: string
+              sub: 
+                type: string
+              brp: 
+                type: object
+                properties: 
+                  voornamen: 
+                    type: string
+                  voorvoegselGeslachtsnaam: 
+                    type: string
+                  geslachtsnaam: 
+                    type: string
+                  voorvoegselPartnernaam: 
+                    type: string
+                    format: nullable
+                  partnernaam: 
+                    type: string
+                    format: nullable
+                  huisnummer: 
+                    type: string
+                  huisletter: 
+                    type: string
+                  huisnummerToevoeging: 
+                    type: string
+                  huisnummerAanduiding: 
+                    type: string
+                  postcode: 
+                    type: string
+                  geboortedatum: 
+                    type: string
+              bri: 
+                type: object
+                properties: 
+                  inkomens: 
+                    type: object
+                    properties: 
+                      2019: 
+                        type: object
+                        properties: 
+                          inkomen: 
+                            type: integer
+                            format: int32
+                          grondslag: 
+                            type: string
+                          status: 
+                            type: string
+                      2020: 
+                        type: object
+                        properties: 
+                          inkomen: 
+                            type: integer
+                            format: int32
+                          grondslag: 
+                            type: string
+                          status: 
+                            type: string
+              verklaring: 
+                type: object
+                properties: 
+                  tekst: 
+                    type: string
+                  authenticatiedienst: 
+                    type: string
+                  betrouwbaarheidsniveau: 
+                    type: string
+                  tijdstempelAuthenticatie: 
+                    type: integer
+                    format: int32
+        aantalMeeverhuizendeKinderen: 
+          type: integer
+          format: int32
+        kaleHuur: 
+          type: integer
+          format: int32
+          
+    toets-resultaat-met-kale-huur: 
+      type: object
+      properties: 
+        toets-resultaat: 
+          type: boolean
+
+    toets-resultaat-segmenten: 
+      type: object
+      properties: 
+        toets-resultaat-tot-hoge-aftoppingsgrens: 
+          type: boolean
+        toets-resultaat-tot-lage-aftoppingsgrens: 
+          type: boolean
+
+    toets-resultaat-locale-binding: 
+      type: object
+      properties:
+        toets-resultaat-locale-binding: 
+          type: boolean
+        
