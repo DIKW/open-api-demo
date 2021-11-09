@@ -27,11 +27,11 @@ Goto extracted folder
 
 Create virtual environment with 
 
-    python3 -m venv env
+    python3 -m venv .venv
 
 Source this environemnt
 
-    source /home/hugo/git/open-api-demo/server/python-flask-server-generated-v03/env/bin/activate
+    source .venv/bin/activate
     
 Add pyjwt to the requirements.txt 
 
