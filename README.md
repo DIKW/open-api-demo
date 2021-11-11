@@ -9,7 +9,10 @@ Overview of available design , test and development tools are [here](https://ope
 
 Minimum viable blog post is [here](https://anthony-f-tannous.medium.com/working-with-openapi-swagger-tools-python-1c0c22f7a629)
 
-Crafting effective microservices in python [connexion](https://engineering.zalando.com/posts/2016/12/crafting-effective-microservices-in-python.html) by Zalando seems like a good package for this.
+Crafting effective microservices in python [connexion](https://engineering.zalando.com/posts/2016/12/crafting-effective-microservices-in-python.html) by Zalando
+seems like a good package for this.
+
+JWT tokens with public signed certificates in python see this [blog](https://blog.miguelgrinberg.com/post/json-web-tokens-with-public-key-signatures)
 
 ## Requirements
 
