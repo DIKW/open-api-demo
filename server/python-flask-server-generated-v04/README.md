@@ -44,6 +44,22 @@ To run the server on a Docker container, please execute the following from the r
 # building the image
 docker build -t swagger_server .
 
-# starting up a container
+# with tag
+docker build -t local/aedestoetsapi:0.4  .
+
+# starting up a container with port mapping
 docker run -p 8080:8080 swagger_server
 ```
+
+
+To transfer the image we build to a remote host we do.
+
+```
+docker save local/aedestoetsapi:0.4   | bzip2 | pv | ssh hugo@149.210.174.128 sudo docker load
+```
+
+## Added docker-compose file
+
+Now we can use the image and server the api with the supplied docker-compose file.
+Keep in mind we have created a DNS entri for aedes.dikw.nl
+
