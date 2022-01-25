@@ -11,10 +11,10 @@ services:
       networks:
         - default
       environment:
-        VIRTUAL_HOST: 'h2.sensingclues.org'
-        LETSENCRYPT_HOST: h2.sensingclues.org
-        LETSENCRYPT_EMAIL: hugo.koopmans@sensingclues.org
-#        LETSENCRYPT_TEST: 'true'
-#        ACME_CA_URI: 'https://acme-staging.api.letsencrypt.org/directory'
+        VIRTUAL_HOST: 'aedes.dikw.nl'
+        LETSENCRYPT_HOST: aedes.dikw.nl
+        LETSENCRYPT_EMAIL: hugo.koopmans@dikw.com
+        LETSENCRYPT_TEST: 'true'
+        ACME_CA_URI: 'https://acme-staging.api.letsencrypt.org/directory'
 
 

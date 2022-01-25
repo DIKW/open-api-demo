@@ -216,7 +216,7 @@ def aedes_verhuurtoets_passendheidstoets_bri_segmenten_post(body):  # noqa: E501
                     return {"msg":"Signature expired"}, 401
                 except jwt.exceptions.InvalidKeyError:
                     return {"msg":"Not a valid key"}, 401
-             else:
+            else:
                 # we controleren niet
                 inkomens = [jwt.decode(i,options={"verify_signature": False}) for i in body.inkomens_ondertekend]
         else:
