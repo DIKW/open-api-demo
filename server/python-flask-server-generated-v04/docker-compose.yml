@@ -1,0 +1,20 @@
+version: '3'
+
+networks:
+  default:
+
+services:
+    aedes:
+      container_name: inkomenstoets
+      image: local/aedestoetsapi:0.4  
+      restart: always
+      networks:
+        - default
+      environment:
+        VIRTUAL_HOST: 'h2.sensingclues.org'
+        LETSENCRYPT_HOST: h2.sensingclues.org
+        LETSENCRYPT_EMAIL: hugo.koopmans@sensingclues.org
+#        LETSENCRYPT_TEST: 'true'
+#        ACME_CA_URI: 'https://acme-staging.api.letsencrypt.org/directory'
+
+

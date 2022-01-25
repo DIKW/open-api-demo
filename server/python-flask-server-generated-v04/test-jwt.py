@@ -1,8 +1,15 @@
-{
-    "aantalMeeverhuizendeKinderen": 2,
-    "controleerHandtekening": false,
-    "inkomens": [
-      {
+# test encode decode jwt
+import base64
+import jwt
+import json
+
+import base64
+
+# read private key from disk
+private_key = open('./keys/jwt-key-aedes-hackaton').read()
+pub_key = open('./keys/jwt-key-aedes-hackaton.pub').read()
+
+data = {
         "jti": "beb7879ae80b2045830862784f7e1a69",
         "iat": 1614847438,
         "nbf": 1614847438,
@@ -44,7 +51,17 @@
           "tijdstempelAuthenticatie": 1614847422
         }
       }
-    ],
-    "inkomensOndertekend": [],
-    "kaleHuur": 750
-  }
+
+token = jwt.encode(data,private_key,algorithm="RS256")
+
+print(token)
+
+padded = token + "=="
+bytedata = base64.urlsafe_b64decode(padded)
+jsondata = bytedata.decode('utf-8',errors='ignore')
+#print(jsondata)
+
+#decoded = jwt.decode(token,pub_key,algorithms="RS256")
+
+
+#print(decoded)

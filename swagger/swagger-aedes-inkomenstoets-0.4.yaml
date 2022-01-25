@@ -2,7 +2,7 @@ openapi: 3.0.1
 info:
   title: verhuurtoetsen
   description: API voor AEDES verhuurtoetsen hackaton
-  version: "0.3"
+  version: "0.4"
 servers:
 - url: http://localhost:8080/
 security:
@@ -89,9 +89,25 @@ components:
       properties: 
         inkomens: 
           type: array
-          items: 
-            type: object
-            properties: 
+          items:
+            $ref: '#/components/schemas/inkomen'
+        inkomensOndertekend: 
+          type: array
+          items:
+            type: string
+        controleerHandtekening:
+          type: boolean
+          default: "false"
+        aantalMeeverhuizendeKinderen: 
+          type: integer
+          format: int32
+        kaleHuur: 
+          type: integer
+          format: int32
+          
+    inkomen:
+          type: object
+          properties: 
               jti: 
                 type: string
               iat: 
@@ -174,13 +190,7 @@ components:
                   tijdstempelAuthenticatie: 
                     type: integer
                     format: int32
-        aantalMeeverhuizendeKinderen: 
-          type: integer
-          format: int32
-        kaleHuur: 
-          type: integer
-          format: int32
-          
+                    
     woonduren:
           type: array
           items: 
