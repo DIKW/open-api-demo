@@ -8,14 +8,14 @@
             "name": "Python: Flask",
             "type": "python",
             "request": "launch",
-            "module": "./server/python-flask-server-generated/swagger_server",
+            "module": "swagger_server",
             "env": {
-                //"FLASK_APP": "__main__.py",
+                //"FLASK_APP": "swagger_server",
                 "FLASK_ENV": "development"
             },
             "args": [
-                //"run",
-                //"--no-debugger"
+                "run",
+                "--no-debugger"
             ],
             "jinja": true
         }

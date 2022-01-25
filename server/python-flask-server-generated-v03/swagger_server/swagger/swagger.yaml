@@ -1,0 +1,284 @@
+openapi: 3.0.1
+info:
+  title: verhuurtoetsen
+  description: API voor AEDES verhuurtoetsen hackaton
+  version: "0.3"
+servers:
+- url: http://localhost:8080/
+security:
+- AuthorizationHeader: []
+paths:
+  /aedes/verhuurtoets/passendheidstoets-bri-met-kale-huur/:
+    post:
+      tags:
+      - AEDES verhuurtoetsen
+      summary: Toetst kale huur volgens het geldende nationale toetsingskader
+      operationId: aedes_verhuurtoets_passendheidstoets_bri_met_kale_huur_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/huishouden'
+        required: true
+      responses:
+        "200":
+          description: Succesvol toetsresultaat
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/toets-resultaat-met-kale-huur'
+        "400":
+          description: Request Failed.
+          content: {}
+      x-openapi-router-controller: swagger_server.controllers.aedes_verhuurtoetsen_controller
+  /aedes/verhuurtoets/passendheidstoets-bri-segmenten/:
+    post:
+      tags:
+      - AEDES verhuurtoetsen
+      summary: Toetst verhuursegmenten van huurder(s) volgens het geldende nationale
+        toetsingskader
+      operationId: aedes_verhuurtoets_passendheidstoets_bri_segmenten_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/huishouden'
+        required: true
+      responses:
+        "200":
+          description: Succesvol toetsresultaat
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/toets-resultaat-segmenten'
+        "400":
+          description: Request Failed.
+          content: {}
+      x-openapi-router-controller: swagger_server.controllers.aedes_verhuurtoetsen_controller
+  /aedes/verhuurtoets/lokale-bindings-toets/:
+    post:
+      tags:
+      - AEDES verhuurtoetsen
+      summary: Toetst woonduur volgens lokaal geldende toetsingskader
+      operationId: aedes_verhuurtoets_lokale_bindings_toets_post
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/woonduren'
+        required: true
+      responses:
+        "200":
+          description: Succesvol toetsresultaat
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/toets-resultaat-lokale-binding'
+        "400":
+          description: Request Failed.
+          content: {}
+      x-openapi-router-controller: swagger_server.controllers.aedes_verhuurtoetsen_controller
+components:
+  schemas:
+    huishouden:
+      type: object
+      properties:
+        inkomens:
+          type: array
+          items:
+            $ref: '#/components/schemas/huishouden_inkomens'
+        aantalMeeverhuizendeKinderen:
+          type: integer
+          format: int32
+        kaleHuur:
+          type: integer
+          format: int32
+    woonduren:
+      type: array
+      items:
+        $ref: '#/components/schemas/woonduren_inner'
+    persoon:
+      type: object
+      properties:
+        voornamen:
+          type: string
+        voorvoegselGeslachtsnaam:
+          type: string
+        geslachtsnaam:
+          type: string
+      example:
+        voornamen: voornamen
+        geslachtsnaam: geslachtsnaam
+        voorvoegselGeslachtsnaam: voorvoegselGeslachtsnaam
+    toets-resultaat-met-kale-huur:
+      type: object
+      properties:
+        personen:
+          type: array
+          items:
+            $ref: '#/components/schemas/persoon'
+        toets-resultaat:
+          type: boolean
+        jwt:
+          type: string
+      example:
+        personen:
+        - voornamen: voornamen
+          geslachtsnaam: geslachtsnaam
+          voorvoegselGeslachtsnaam: voorvoegselGeslachtsnaam
+        - voornamen: voornamen
+          geslachtsnaam: geslachtsnaam
+          voorvoegselGeslachtsnaam: voorvoegselGeslachtsnaam
+        jwt: jwt
+        toets-resultaat: true
+    toets-resultaat-segmenten:
+      type: object
+      properties:
+        personen:
+          type: array
+          items:
+            $ref: '#/components/schemas/persoon'
+        toets-resultaat-tot-hoge-aftoppingsgrens:
+          type: boolean
+        toets-resultaat-tot-lage-aftoppingsgrens:
+          type: boolean
+        jwt:
+          type: string
+      example:
+        toets-resultaat-tot-hoge-aftoppingsgrens: true
+        personen:
+        - voornamen: voornamen
+          geslachtsnaam: geslachtsnaam
+          voorvoegselGeslachtsnaam: voorvoegselGeslachtsnaam
+        - voornamen: voornamen
+          geslachtsnaam: geslachtsnaam
+          voorvoegselGeslachtsnaam: voorvoegselGeslachtsnaam
+        jwt: jwt
+        toets-resultaat-tot-lage-aftoppingsgrens: true
+    toets-resultaat-lokale-binding:
+      type: object
+      properties:
+        personen:
+          type: array
+          items:
+            $ref: '#/components/schemas/persoon'
+        toets-resultaat-lokale-binding:
+          type: boolean
+        jwt:
+          type: string
+      example:
+        personen:
+        - voornamen: voornamen
+          geslachtsnaam: geslachtsnaam
+          voorvoegselGeslachtsnaam: voorvoegselGeslachtsnaam
+        - voornamen: voornamen
+          geslachtsnaam: geslachtsnaam
+          voorvoegselGeslachtsnaam: voorvoegselGeslachtsnaam
+        jwt: jwt
+        toets-resultaat-lokale-binding: true
+    huishouden_brp:
+      type: object
+      properties:
+        voornamen:
+          type: string
+        voorvoegselGeslachtsnaam:
+          type: string
+        geslachtsnaam:
+          type: string
+        voorvoegselPartnernaam:
+          type: string
+          format: nullable
+        partnernaam:
+          type: string
+          format: nullable
+        huisnummer:
+          type: string
+        huisletter:
+          type: string
+        huisnummerToevoeging:
+          type: string
+        huisnummerAanduiding:
+          type: string
+        postcode:
+          type: string
+        geboortedatum:
+          type: string
+    huishouden_bri_inkomens_2019:
+      type: object
+      properties:
+        inkomen:
+          type: integer
+          format: int32
+        grondslag:
+          type: string
+        status:
+          type: string
+    huishouden_bri_inkomens:
+      type: object
+      properties:
+        "2019":
+          $ref: '#/components/schemas/huishouden_bri_inkomens_2019'
+        "2020":
+          $ref: '#/components/schemas/huishouden_bri_inkomens_2019'
+    huishouden_bri:
+      type: object
+      properties:
+        inkomens:
+          $ref: '#/components/schemas/huishouden_bri_inkomens'
+    huishouden_verklaring:
+      type: object
+      properties:
+        tekst:
+          type: string
+        authenticatiedienst:
+          type: string
+        betrouwbaarheidsniveau:
+          type: string
+        tijdstempelAuthenticatie:
+          type: integer
+          format: int32
+    huishouden_inkomens:
+      type: object
+      properties:
+        jti:
+          type: string
+        iat:
+          type: integer
+          format: int32
+        nbf:
+          type: integer
+          format: int32
+        exp:
+          type: integer
+          format: int32
+        iss:
+          type: string
+        aud:
+          type: string
+        sub:
+          type: string
+        brp:
+          $ref: '#/components/schemas/huishouden_brp'
+        bri:
+          $ref: '#/components/schemas/huishouden_bri'
+        verklaring:
+          $ref: '#/components/schemas/huishouden_verklaring'
+    woonduren_inner:
+      type: object
+      properties:
+        voornamen:
+          type: string
+        voorvoegselGeslachtsnaam:
+          type: string
+        geslachtsnaam:
+          type: string
+        woonduur:
+          type: integer
+          format: int32
+  securitySchemes:
+    AuthorizationHeader:
+      type: apiKey
+      name: Authorization
+      in: header
+      x-apikeyInfoFunc: swagger_server.controllers.authorization_controller.check_AuthorizationHeader
+

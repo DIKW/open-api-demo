@@ -1,0 +1,1549 @@
+{
+	"info": {
+		"_postman_id": "07ea2433-4567-4344-b0af-51571eb53a1d",
+		"name": "Mijn Overheid",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "DvMG",
+			"item": [
+				{
+					"name": "Happy flow",
+					"item": [
+						{
+							"name": "Authorize",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 302\", function () {",
+											"    pm.response.to.have.status(302);",
+											"});",
+											"",
+											"pm.environment.set(\"DVMG_STAP_1\", responseHeaders.Location);"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const cookieJar = pm.cookies.jar();",
+											"",
+											"cookieJar.clear(pm.environment.get('DVMG_HOST'), function (error) {",
+											"  if (null !== error) {",
+											"      console.error('Could not clear cookie jar: '+error+'. Please check if the domain is whitelisted');",
+											"  }",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": false,
+								"followOriginalHttpMethod": false,
+								"followAuthorizationHeader": false,
+								"removeRefererHeaderOnRedirect": false,
+								"disableUrlEncoding": false,
+								"disableCookies": false,
+								"tlsPreferServerCiphers": false,
+								"strictSSL": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{DVMG_HOST}}/?client_id={{DVMG_CLIENT_ID}}&response_type={{DVMG_RESPONSE_TYPE}}&redirect_uri={{DVMG_REDIRECT_URI}}&scope={{DVMG_SCOPE}}&state=f518931c10204adce001892819d7ad2634dc13ebd4069379effd342c994766e9",
+									"host": [
+										"{{DVMG_HOST}}"
+									],
+									"path": [
+										""
+									],
+									"query": [
+										{
+											"key": "client_id",
+											"value": "{{DVMG_CLIENT_ID}}"
+										},
+										{
+											"key": "response_type",
+											"value": "{{DVMG_RESPONSE_TYPE}}"
+										},
+										{
+											"key": "redirect_uri",
+											"value": "{{DVMG_REDIRECT_URI}}"
+										},
+										{
+											"key": "scope",
+											"value": "{{DVMG_SCOPE}}"
+										},
+										{
+											"key": "state",
+											"value": "f518931c10204adce001892819d7ad2634dc13ebd4069379effd342c994766e9"
+										}
+									]
+								},
+								"description": "Dit request is enkel toegevoegd om te laten zien hoe er tot een geldige authorize URL gekomen kan worden. Nadat je de URL gegenereerd hebt dien je deze in de adresbalk van jouw browser te plakken en het proces totaan het zien van de authorization code te doorlopen."
+							},
+							"response": []
+						},
+						{
+							"name": "Stap 1",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"",
+											"const $ = cheerio.load(responseBody);",
+											"var csrf = $(\"input[name='_csrf_dvmg']\" ).val();",
+											"pm.environment.set('DVMG_CSRF_TOKEN', csrf);",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"strictSSL": true,
+								"followOriginalHttpMethod": false,
+								"followAuthorizationHeader": false,
+								"removeRefererHeaderOnRedirect": false,
+								"disableUrlEncoding": false,
+								"disableCookies": false,
+								"tlsPreferServerCiphers": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{DVMG_HOST}}{{DVMG_STAP_1}}",
+									"host": [
+										"{{DVMG_HOST}}{{DVMG_STAP_1}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Stap 2",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"const $ = cheerio.load(responseBody);",
+											"var csrf = $(\"input[name='_csrf_dvmg']\" ).val();",
+											"pm.environment.set('DVMG_CSRF_TOKEN', csrf);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"strictSSL": true,
+								"followRedirects": false,
+								"followOriginalHttpMethod": false,
+								"followAuthorizationHeader": false,
+								"removeRefererHeaderOnRedirect": false,
+								"disableUrlEncoding": false,
+								"disableCookies": false,
+								"tlsPreferServerCiphers": false
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "_csrf_dvmg",
+											"value": "{{DVMG_CSRF_TOKEN}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{DVMG_HOST}}/stap2",
+									"host": [
+										"{{DVMG_HOST}}"
+									],
+									"path": [
+										"stap2"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Stap 3",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 302\", function () {",
+											"    pm.response.to.have.status(302);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": false,
+								"strictSSL": true,
+								"followOriginalHttpMethod": false,
+								"followAuthorizationHeader": false,
+								"removeRefererHeaderOnRedirect": false,
+								"disableUrlEncoding": false,
+								"disableCookies": false,
+								"tlsPreferServerCiphers": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{DVMG_HOST}}/stap3",
+									"host": [
+										"{{DVMG_HOST}}"
+									],
+									"path": [
+										"stap3"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Stap 3 - DigiD inloggen",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 302\", function () {",
+											"    pm.response.to.have.status(302);",
+											"});",
+											"",
+											"pm.environment.set(\"DVMG_DIGID_LOGIN\", responseHeaders.Location);",
+											"",
+											"const cookieJar = pm.cookies.jar();",
+											"",
+											"cookieJar.clear(responseHeaders.Location, function (error) {",
+											"  if (null !== error) {",
+											"      console.error('Could not clear cookie jar: '+error+'. Please check if the domain is whitelisted');",
+											"  }",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": false,
+								"strictSSL": true,
+								"followOriginalHttpMethod": false,
+								"followAuthorizationHeader": false,
+								"removeRefererHeaderOnRedirect": false,
+								"disableUrlEncoding": false,
+								"disableCookies": false,
+								"tlsPreferServerCiphers": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{DVMG_HOST}}/digid/login",
+									"host": [
+										"{{DVMG_HOST}}"
+									],
+									"path": [
+										"digid",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Stap 3 - Stub select BSN",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"formUrlMatcher = responseBody.match(/\\<form method=\"POST\" class=\"form-inline\"\\s+action=\"(.*?)\"/);",
+											"",
+											"pm.environment.set('DVMG_DIGID_STUB_LOGIN', formUrlMatcher[1]);",
+											"",
+											"samlRequestMatcher = responseBody.match(/<input type=\"hidden\" name=\"SAMLRequest\" value=\"(.*?)\"/);",
+											"pm.environment.set('DVMG_DIGID_SAML_REQUEST', samlRequestMatcher[1]);",
+											"",
+											"spSettingsMatcher = responseBody.match(/<input type=\"hidden\" name=\"sp_settings\" value=\"(.*?)\"/);",
+											"pm.environment.set('DVMG_DIGID_SP_SETTINGS', spSettingsMatcher[1]);",
+											"",
+											"checksumMatcher = responseBody.match(/<input type=\"hidden\" name=\"checksum\" value=\"(.*?)\"/);",
+											"pm.environment.set('DVMG_DIGID_STUB_CHECKSUM', checksumMatcher[1]);",
+											"",
+											"relayStateMatcher = responseBody.match(/<input type=\"hidden\" name=\"relay_state\" value=\"(.*?)\"/)",
+											"pm.environment.set('DVMG_DIGID_STUB_RELAY_STATE', relayStateMatcher[1]);",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"strictSSL": true,
+								"followRedirects": false,
+								"followOriginalHttpMethod": false,
+								"followAuthorizationHeader": false,
+								"removeRefererHeaderOnRedirect": false,
+								"disableUrlEncoding": false,
+								"disableCookies": false,
+								"tlsPreferServerCiphers": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{DVMG_DIGID_LOGIN}}",
+									"host": [
+										"{{DVMG_DIGID_LOGIN}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Stap 3 - Stub BSN login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 302\", function () {",
+											"    pm.response.to.have.status(302);",
+											"});",
+											"",
+											"pm.environment.set(\"DVMG_DIGID_CHECK\", responseHeaders.Location);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": false,
+								"strictSSL": true,
+								"followOriginalHttpMethod": false,
+								"followAuthorizationHeader": false,
+								"removeRefererHeaderOnRedirect": false,
+								"disableUrlEncoding": false,
+								"disableCookies": false,
+								"tlsPreferServerCiphers": false
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "SAMLRequest",
+											"value": "{{DVMG_DIGID_SAML_REQUEST}}",
+											"type": "text"
+										},
+										{
+											"key": "sp_settings",
+											"value": "{{DVMG_DIGID_SP_SETTINGS}}",
+											"type": "text"
+										},
+										{
+											"key": "checksum",
+											"value": "{{DVMG_DIGID_STUB_CHECKSUM}}",
+											"type": "text"
+										},
+										{
+											"key": "relay_state",
+											"value": "{{DVMG_DIGID_STUB_RELAY_STATE}}",
+											"type": "text"
+										},
+										{
+											"key": "bsn",
+											"value": "{{DVMG_DIGID_BSN}}",
+											"type": "text"
+										},
+										{
+											"key": "auth_level",
+											"value": "{{DVMG_DIGID_AUTH_LEVEL}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{DVMG_DIGID_STUB_LOGIN}}",
+									"host": [
+										"{{DVMG_DIGID_STUB_LOGIN}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Stap 3 - Check login",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 302\", function () {",
+											"    pm.response.to.have.status(302);",
+											"});",
+											"",
+											"pm.environment.set(\"DVMG_STAP_3_AFTER_LOGIN\", responseHeaders.Location);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true,
+								"followRedirects": false,
+								"strictSSL": true,
+								"followOriginalHttpMethod": false,
+								"followAuthorizationHeader": false,
+								"removeRefererHeaderOnRedirect": false,
+								"disableUrlEncoding": false,
+								"disableCookies": false,
+								"tlsPreferServerCiphers": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "SAMLRequest",
+											"value": "{{DVMG_DIGID_SAML_REQUEST}}",
+											"type": "text"
+										},
+										{
+											"key": "sp_settings",
+											"value": "{{DVMG_DIGID_SP_SETTINGS}}",
+											"type": "text"
+										},
+										{
+											"key": "checksum",
+											"value": "{{DVMG_DIGID_STUB_CHECKSUM}}",
+											"type": "text"
+										},
+										{
+											"key": "relay_state",
+											"value": "{{DVMG_DIGID_STUB_RELAY_STATE}}",
+											"type": "text"
+										},
+										{
+											"key": "bsn",
+											"value": "{{DVMG_DIGID_BSN}}",
+											"type": "text"
+										},
+										{
+											"key": "auth_level",
+											"value": "{{DVMG_DIGID_AUTH_LEVEL}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{DVMG_DIGID_CHECK}}",
+									"host": [
+										"{{DVMG_DIGID_CHECK}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Stap 3 - Toon gegevens",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Body bevat 'Controleer uw gegevens'\", function () {",
+											"    pm.expect(pm.response.text()).to.include(\"Controleer uw gegevens\");",
+											"});",
+											"",
+											"pm.test(\"Body bevat 'Akkoord'\", function () {",
+											"    pm.expect(pm.response.text()).to.include(\"Akkoord\");",
+											"});",
+											"",
+											"const $ = cheerio.load(responseBody);",
+											"var csrf = $(\"input[name='_csrf_dvmg']\" ).val();",
+											"pm.environment.set('DVMG_CSRF_TOKEN', csrf);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"strictSSL": true,
+								"followRedirects": false,
+								"followOriginalHttpMethod": false,
+								"followAuthorizationHeader": false,
+								"removeRefererHeaderOnRedirect": false,
+								"disableUrlEncoding": false,
+								"disableCookies": false,
+								"tlsPreferServerCiphers": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{DVMG_STAP_3_AFTER_LOGIN}}",
+									"host": [
+										"{{DVMG_STAP_3_AFTER_LOGIN}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Stap 4",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"pm.test(\"Body bevat 'Samenvatting'\", function () {",
+											"    pm.expect(pm.response.text()).to.include(\"Samenvatting\");",
+											"});",
+											"",
+											"pm.test(\"Body bevat 'Deel mijn gegevens'\", function () {",
+											"    pm.expect(pm.response.text()).to.include(\"Deel mijn gegevens\");",
+											"});",
+											"",
+											"const $ = cheerio.load(responseBody);",
+											"var csrf = $(\"input[name='_csrf_dvmg']\" ).val();",
+											"pm.environment.set('DVMG_CSRF_TOKEN', csrf);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"strictSSL": true,
+								"followRedirects": false,
+								"followOriginalHttpMethod": false,
+								"followAuthorizationHeader": false,
+								"removeRefererHeaderOnRedirect": false,
+								"disableUrlEncoding": false,
+								"disableCookies": false,
+								"tlsPreferServerCiphers": false
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "_csrf_dvmg",
+											"value": "{{DVMG_CSRF_TOKEN}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{DVMG_HOST}}/stap4",
+									"host": [
+										"{{DVMG_HOST}}"
+									],
+									"path": [
+										"stap4"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Stap 4 - Akkoord",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 302\", function () {",
+											"    pm.response.to.have.status(302);",
+											"});",
+											"",
+											"console.log('Location header');",
+											"console.log(responseHeaders.Location);",
+											"",
+											"authorizationCodeMatcher = responseHeaders.Location.match(/code=([a-f0-9]+)/);",
+											"",
+											"console.log('Matcher');",
+											"console.log(authorizationCodeMatcher);",
+											"",
+											"pm.environment.set('DVMG_AUTHORIZATION_CODE', authorizationCodeMatcher[1]);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"followRedirects": false,
+								"strictSSL": true,
+								"followOriginalHttpMethod": false,
+								"followAuthorizationHeader": false,
+								"removeRefererHeaderOnRedirect": false,
+								"disableUrlEncoding": false,
+								"disableCookies": false,
+								"tlsPreferServerCiphers": false
+							},
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "_csrf_dvmg",
+											"value": "{{DVMG_CSRF_TOKEN}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{DVMG_HOST}}/stap4/finalize",
+									"host": [
+										"{{DVMG_HOST}}"
+									],
+									"path": [
+										"stap4",
+										"finalize"
+									],
+									"query": [
+										{
+											"key": "",
+											"value": "",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "1. Access token request",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"var navigator = {};",
+											"var window = {};",
+											"",
+											"const { v4: uuidv4 } = require('uuid');",
+											"eval(pm.environment.get(\"jsrsasign-js\"));",
+											"",
+											"// https://explore.postman.com/templates/1879/generate-jwt",
+											"var jti = uuidv4();",
+											"var jwtSecret = pm.environment.get('DVMG_DEMO_PRIVATE_KEY') || ''",
+											"console.log('jti', jti);",
+											"",
+											"// Set headers for JWT",
+											"var header = {",
+											"\t'typ': 'JWT',",
+											"\t'alg': 'RS256'",
+											"};",
+											"",
+											"// Prepare timestamp in seconds",
+											"var currentTimestamp = Math.floor(Date.now() / 1000)",
+											"",
+											"var payload = {",
+											"\t'iss': pm.environment.get(\"DVMG_CLIENT_ID\") || '',",
+											"\t'sub': pm.environment.get(\"DVMG_CLIENT_ID\") || '',",
+											"    'aud': pm.environment.get('DVMG_API') + '/delen/code',",
+											"\t'iat': currentTimestamp,",
+											"\t'exp': currentTimestamp + 30, // expiry time is 30 seconds from time of creation",
+											"\t'jti': jti",
+											"}",
+											"console.log('payload', payload);",
+											"",
+											"// sign token",
+											"var signedToken = KJUR.jws.JWS.sign(header.alg, header, payload, jwtSecret);",
+											"",
+											"pm.environment.set('JWT_SIGNED', signedToken)",
+											"console.log('Signed and encoded JWT', signedToken)"
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"var jsonData = pm.response.json();",
+											"",
+											"pm.test(\"Token type is Bearer\", function () {",
+											"    pm.expect(jsonData.token_type).to.eql(\"Bearer\");",
+											"});",
+											"",
+											"pm.test(\"Token expires in 300 s\", function () {",
+											"    pm.expect(jsonData.expires_in).to.eql(300);",
+											"});",
+											"",
+											"var accessToken = jsonData.access_token;",
+											"var accessTokenParts = accessToken.split('.');",
+											"var accessTokenBody = accessTokenParts[1];",
+											"var accessTokenBodyDecoded = atob(accessTokenBody);",
+											"var accessTokenBodyArray = JSON.parse(accessTokenBodyDecoded);",
+											"",
+											"console.log(accessTokenBodyArray);",
+											"",
+											"pm.test(\"Token sub is niet leeg\", function () {",
+											"    pm.expect(accessTokenBodyArray.sub).not.eq(\"\");",
+											"});",
+											"",
+											"pm.test(\"Token scope is inkomenstoets\", function () {",
+											"    pm.expect(accessTokenBodyArray.scopes).to.eql([\"inkomenstoets\"]);",
+											"});",
+											"",
+											"console.log(pm.request.url);",
+											"",
+											"pm.test(\"Token iss is gelijk aan huidige URL\", function () {",
+											"    pm.expect(accessTokenBodyArray.iss).to.eql(pm.environment.get(\"DVMG_API\") + pm.request.url.getPath());",
+											"});",
+											"",
+											"pm.test(\"Token azp is gelijk aan client id\", function () {",
+											"    pm.expect(accessTokenBodyArray.azp).to.eql(pm.environment.get(\"DVMG_CLIENT_ID\"));",
+											"});",
+											"",
+											"pm.environment.set(\"DVMG_ACCESS_TOKEN\", accessToken);"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableCookies": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json; version=1.0",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "code",
+											"value": "{{DVMG_AUTHORIZATION_CODE}}",
+											"type": "text"
+										},
+										{
+											"key": "redirect_uri",
+											"value": "{{DVMG_REDIRECT_URI}}",
+											"type": "text"
+										},
+										{
+											"key": "client_id",
+											"value": "{{DVMG_CLIENT_ID}}",
+											"type": "text"
+										},
+										{
+											"key": "client_assertion_type",
+											"value": "{{DVMG_CLIENT_ASSERTION_TYPE}}",
+											"type": "text"
+										},
+										{
+											"key": "grant_type",
+											"value": "{{DVMG_GRANT_TYPE}}",
+											"type": "text"
+										},
+										{
+											"key": "client_assertion",
+											"value": "{{JWT_SIGNED}}",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{DVMG_API}}/delen/code?",
+									"host": [
+										"{{DVMG_API}}"
+									],
+									"path": [
+										"delen",
+										"code"
+									],
+									"query": [
+										{
+											"key": "",
+											"value": null
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "2. Gegevens request",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 200\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});",
+											"",
+											"var jwtResourceData = pm.response.text();",
+											"var jwtResourceDataParts = jwtResourceData.split('.');",
+											"var jwtResourceDataBody = jwtResourceDataParts[1];",
+											"var jwtResourceDataBodyDecoded = atob(jwtResourceDataBody);",
+											"var jwtResourceDataBodyArray = JSON.parse(jwtResourceDataBodyDecoded);",
+											"",
+											"console.log(jwtResourceDataBodyArray);",
+											"",
+											"pm.test(\"BRP exists\", function () {",
+											"    pm.expect(jwtResourceDataBodyArray.brp).to.exist;",
+											"});",
+											"",
+											"pm.test(\"BRP voornamen is not empty\", function () {",
+											"    pm.expect(jwtResourceDataBodyArray.brp.voornamen).to.not.be.empty;",
+											"});",
+											"",
+											"pm.test(\"BRP geslachtsnaam is not empty\", function () {",
+											"    pm.expect(jwtResourceDataBodyArray.brp.geslachtsnaam).to.not.be.empty;",
+											"});",
+											"",
+											"pm.test(\"BRI exists\", function () {",
+											"    pm.expect(jwtResourceDataBodyArray.bri).to.exist;",
+											"});",
+											"",
+											"pm.test(\"Audience is correct\", function () {",
+											"    pm.expect(jwtResourceDataBodyArray.aud).to.eql(pm.environment.get(\"DVMG_CLIENT_ID\"));",
+											"});",
+											"",
+											"function buildVisualization(object, name) {",
+											"    let template = '';",
+											"",
+											"    for (var key in object) {",
+											"        if (typeof object[key] === 'object') {",
+											"            template += buildVisualization(object[key], (typeof name !== 'undefined' ? name+' ' : '')+key);",
+											"        } else {",
+											"            template += '<tr><td>'+(typeof name !== 'undefined' ? name+' ' : '')+''+key+'</td><td>'+object[key]+'</td></tr>';    ",
+											"        }",
+											"    }",
+											"",
+											"    return template;",
+											"}",
+											"",
+											"let template = `",
+											"    <table style=\"color:#fff\" bgcolor=\"#000\">",
+											"        <tr>",
+											"            <th>Key</th>",
+											"            <th>Value</th>",
+											"        </tr>",
+											"`;",
+											"",
+											"template += buildVisualization(jwtResourceDataBodyArray);",
+											"",
+											"pm.visualizer.set(template, {",
+											"    // Pass the response body parsed as JSON as `data`",
+											"    response: jwtResourceDataBodyArray",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true,
+								"strictSSL": false,
+								"followRedirects": false,
+								"followOriginalHttpMethod": false,
+								"followAuthorizationHeader": false,
+								"removeRefererHeaderOnRedirect": false,
+								"disableUrlEncoding": false,
+								"disableCookies": true,
+								"tlsPreferServerCiphers": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "application/jwt; version=1.0"
+									},
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{DVMG_ACCESS_TOKEN}}"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{DVMG_API}}/delen/gegevens?",
+									"host": [
+										"{{DVMG_API}}"
+									],
+									"path": [
+										"delen",
+										"gegevens"
+									],
+									"query": [
+										{
+											"key": "",
+											"value": null
+										}
+									]
+								},
+								"description": "Nadat 1. Access token request is uitgevoerd kun je hier direct op \"Send\" klikken. Er worden dan gelijk gegevens opgehaald. Onder Body --> Visualize zie je de gedecodeerde gegevens."
+							},
+							"response": []
+						}
+					],
+					"description": "Deze folder kan d.m.v. de Runner van Postman volledig doorlopen worden.",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "Foutscenario's",
+					"item": [
+						{
+							"name": "Access token request - Onjuist header",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 406\", function () {",
+											"    pm.response.to.have.status(406);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "application/jwt; version=FOUT"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "code",
+											"value": "def50200310a0e086196df2870473b487ab964626e078757f506be6e898411dd0782f85a7efb12e9eedc388584135e85459849ce866b06b46c50f23b9e2b08312766c317341496e3f24ff3a3e2d393d6bab139ce745584e4996b76edd709187944d7d9e11f5c0a83d2693bb3a3af4e8bdecebd4e1141f0baa81eb30ceeb25047a19956fd9bf84914a1a0faabba79120bee830d2ad7220e272161997e5ea965a1788415aac2ba73ba95e5421eb034b7181fe6ee8cb922345b9314509d17b459c1dbbe521aef054461a3a55e11e5e154817f9c9bef90a099d5fb78457f5635ff62f404d73c6a91b50a748cc9f4bdd2caf3328cd77c50ef1ff8986d56dcccf813d66ac7728183ca4cfc7e5bdb97e51a5fcb854f03428482f9d6b82b43b5070b435b8181416c030063768d3aca970be6cb61c3a92aa9ca07ad1a85daea6d629c29c69667ad79f963c3f0702800e9bfa5a6a4361fd5a293e310647f57b264b5090d25b660aceb5f830785652c7c9a0651dcb4091c1ada012b8e5a832142f0e0a9d922f0bf76b78205543d9dc74c229265915dd0c70797efccef25195e97db3ed3afb9ef3b8091cda99b1465889702517ed700f0bdc6e2e03edac359402c75a52cba",
+											"type": "text"
+										},
+										{
+											"key": "grant_type",
+											"value": "authorization_code",
+											"type": "text"
+										},
+										{
+											"key": "redirect_uri",
+											"value": "http://stubs:5090/DVMGdemo/app/web/return.php",
+											"type": "text"
+										},
+										{
+											"key": "client_id",
+											"value": "6960a7cb9cc29bb3b86e9477a6e8b13a",
+											"type": "text"
+										},
+										{
+											"key": "client_assertion_type",
+											"value": "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{DVMG_API}}/delen/code?",
+									"host": [
+										"{{DVMG_API}}"
+									],
+									"path": [
+										"delen",
+										"code"
+									],
+									"query": [
+										{
+											"key": "",
+											"value": null
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Gegevens request - Onjuiste authorization header",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true,
+								"strictSSL": false,
+								"followRedirects": false,
+								"followOriginalHttpMethod": false,
+								"followAuthorizationHeader": false,
+								"removeRefererHeaderOnRedirect": false,
+								"disableUrlEncoding": false,
+								"disableCookies": true,
+								"tlsPreferServerCiphers": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "application/jwt; version=1.0"
+									},
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer Fout"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{DVMG_API}}/delen/gegevens?",
+									"host": [
+										"{{DVMG_API}}"
+									],
+									"path": [
+										"delen",
+										"gegevens"
+									],
+									"query": [
+										{
+											"key": "",
+											"value": null
+										}
+									]
+								},
+								"description": "Nadat 1. Access token request is uitgevoerd kun je hier direct op \"Send\" klikken. Er worden dan gelijk gegevens opgehaald. Onder Body --> Visualize zie je de gedecodeerde gegevens."
+							},
+							"response": []
+						},
+						{
+							"name": "Gegevens request - Ongeldige accept header",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 406\", function () {",
+											"    pm.response.to.have.status(406);",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true,
+								"strictSSL": false,
+								"followRedirects": false,
+								"followOriginalHttpMethod": false,
+								"followAuthorizationHeader": false,
+								"removeRefererHeaderOnRedirect": false,
+								"disableUrlEncoding": false,
+								"disableCookies": true,
+								"tlsPreferServerCiphers": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "application/jwt; version=FOUT"
+									},
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{DVMG_ACCESS_TOKEN}}"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{DVMG_API}}/delen/gegevens?",
+									"host": [
+										"{{DVMG_API}}"
+									],
+									"path": [
+										"delen",
+										"gegevens"
+									],
+									"query": [
+										{
+											"key": "",
+											"value": null
+										}
+									]
+								},
+								"description": "Nadat 1. Access token request is uitgevoerd kun je hier direct op \"Send\" klikken. Er worden dan gelijk gegevens opgehaald. Onder Body --> Visualize zie je de gedecodeerde gegevens."
+							},
+							"response": []
+						},
+						{
+							"name": "Gegevens request - Authorization header wordt niet meegestuurd",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true,
+								"strictSSL": false,
+								"followRedirects": false,
+								"followOriginalHttpMethod": false,
+								"followAuthorizationHeader": false,
+								"removeRefererHeaderOnRedirect": false,
+								"disableUrlEncoding": false,
+								"disableCookies": true,
+								"tlsPreferServerCiphers": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "application/jwt; version=1.0"
+									},
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "BEARER ",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{DVMG_API}}/delen/gegevens?",
+									"host": [
+										"{{DVMG_API}}"
+									],
+									"path": [
+										"delen",
+										"gegevens"
+									],
+									"query": [
+										{
+											"key": "",
+											"value": null
+										}
+									]
+								},
+								"description": "Nadat 1. Access token request is uitgevoerd kun je hier direct op \"Send\" klikken. Er worden dan gelijk gegevens opgehaald. Onder Body --> Visualize zie je de gedecodeerde gegevens."
+							},
+							"response": []
+						},
+						{
+							"name": "Gegevens request - Accept header wordt niet meegestuurd",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 406\", function () {",
+											"    pm.response.to.have.status(406);",
+											"});",
+											"",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true,
+								"strictSSL": false,
+								"followRedirects": false,
+								"followOriginalHttpMethod": false,
+								"followAuthorizationHeader": false,
+								"removeRefererHeaderOnRedirect": false,
+								"disableUrlEncoding": false,
+								"disableCookies": true,
+								"tlsPreferServerCiphers": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "application/jwt; version=1.0",
+										"disabled": true
+									},
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer {{DVMG_ACCESS_TOKEN}}"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{DVMG_API}}/delen/gegevens?",
+									"host": [
+										"{{DVMG_API}}"
+									],
+									"path": [
+										"delen",
+										"gegevens"
+									],
+									"query": [
+										{
+											"key": "",
+											"value": null
+										}
+									]
+								},
+								"description": "Nadat 1. Access token request is uitgevoerd kun je hier direct op \"Send\" klikken. Er worden dan gelijk gegevens opgehaald. Onder Body --> Visualize zie je de gedecodeerde gegevens."
+							},
+							"response": []
+						},
+						{
+							"name": "Access token request - Naxsi test geen SQL block",
+							"event": [
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableCookies": true
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Accept",
+										"value": "application/json; version=1.0",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "code",
+											"value": "{{DVMG_AUTHORIZATION_CODE}}",
+											"type": "text"
+										},
+										{
+											"key": "redirect_uri",
+											"value": "{{DVMG_REDIRECT_URI}}",
+											"type": "text"
+										},
+										{
+											"key": "client_id",
+											"value": "{{DVMG_CLIENT_ID}}",
+											"type": "text"
+										},
+										{
+											"key": "client_assertion_type",
+											"value": "{{DVMG_CLIENT_ASSERTION_TYPE}}",
+											"type": "text"
+										},
+										{
+											"key": "grant_type",
+											"value": "{{DVMG_GRANT_TYPE}}",
+											"type": "text"
+										},
+										{
+											"key": "client_assertion",
+											"value": "--eyJ0eXAiOiJKV1QiLA0KICJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJqb2UiLA0KICJleHAiOjEzMDA4MTkzODAsDQogImh0dHA6Ly9leGFtcGxlLmNvbS9pc19yb290Ijp0cnVlfQ.dBjftJeZ4CVP--mB92K27uhbUJU1p1r_wW1gFWFOEjXk\n",
+											"description": "JWT with \"--\" must trigger status 401 instead of NGINX 405",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{DVMG_API}}/delen/code?",
+									"host": [
+										"{{DVMG_API}}"
+									],
+									"path": [
+										"delen",
+										"code"
+									],
+									"query": [
+										{
+											"key": "",
+											"value": null
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "2. Gegevens request - Geen Naxsi melding op header met -- in JWT",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status code is 401\", function () {",
+											"    pm.response.to.have.status(401);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true,
+								"strictSSL": false,
+								"followRedirects": false,
+								"followOriginalHttpMethod": false,
+								"followAuthorizationHeader": false,
+								"removeRefererHeaderOnRedirect": false,
+								"disableUrlEncoding": false,
+								"disableCookies": true,
+								"tlsPreferServerCiphers": false
+							},
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Accept",
+										"type": "text",
+										"value": "application/jwt; version=1.0"
+									},
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "Bearer eyJ0e--XAiOiJKV1QiLA0KICJhbGciOiJIUzI1NiJ9"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "{{DVMG_API}}/delen/gegevens?",
+									"host": [
+										"{{DVMG_API}}"
+									],
+									"path": [
+										"delen",
+										"gegevens"
+									],
+									"query": [
+										{
+											"key": "",
+											"value": null
+										}
+									]
+								},
+								"description": "Nadat 1. Access token request is uitgevoerd kun je hier direct op \"Send\" klikken. Er worden dan gelijk gegevens opgehaald. Onder Body --> Visualize zie je de gedecodeerde gegevens."
+							},
+							"response": []
+						}
+					]
+				}
+			],
+			"description": "Tests voor de Delen van Mijn Gegevens API.",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"if (",
+							"    pm.request.url.toString().includes(pm.environment.get('DVMG_HOST')) ||",
+							"    pm.request.url.toString().includes(pm.environment.get('DVMG_API'))",
+							"){",
+							"    console.log('Checking if all required Nginx security headers are present for DvMG');",
+							"",
+							"    pm.test(\"X-Frame-Options header is DENY\", function() {",
+							"        pm.response.headers.has('X-Frame-Options');",
+							"        pm.expect(pm.response.headers.get('X-Frame-Options')).to.equal('DENY');",
+							"    });",
+							"",
+							"    pm.test(\"Strict-Transport-Security header check\", function() {",
+							"        pm.response.headers.has('Strict-Transport-Security');",
+							"        var header = pm.response.headers.get('Strict-Transport-Security');",
+							"        ",
+							"        pm.expect(header).to.contain('max-age=31536000');",
+							"        pm.expect(header).to.contain('includeSubdomains');",
+							"    });",
+							"",
+							"    pm.test(\"X-Content-Type-Options header check\", function() {",
+							"        pm.response.headers.has('X-Content-Type-Options');",
+							"        pm.expect(pm.response.headers.get('X-Content-Type-Options')).to.equal('nosniff');",
+							"    });",
+							"",
+							"    pm.test(\"Referrer-Policy header check\", function() {",
+							"        pm.response.headers.has('Referrer-Policy');",
+							"        pm.expect(pm.response.headers.get('Referrer-Policy')).to.equal('strict-origin-when-cross-origin');",
+							"    });",
+							"}"
+						]
+					}
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
