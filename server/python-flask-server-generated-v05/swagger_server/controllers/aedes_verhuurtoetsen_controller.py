@@ -91,6 +91,8 @@ def aedes_verhuurtoets_passendheidstoets_bri_met_kale_huur_post(body):  # noqa: 
     parameters = {
                 "index2019":   1.0523,
                 "index2020":   1.0248,
+                "index2021":   1.0248,
+                "index2022":   1.0248,
                 "aowLeeftijd": 796,
                 "lageAftoppingsgrens": 633.25,
                 "hogeAftoppingsgrens": 678.66,
@@ -147,7 +149,26 @@ def aedes_verhuurtoets_passendheidstoets_bri_met_kale_huur_post(body):  # noqa: 
             
             gbd = datetime.strptime(ink.brp.geboortedatum, '%Y%m%d')
             gbds.append((now.year - gbd.year) * 12 + (now.month - gbd.month))
-            gezinsInks = gezinsInks + ink.bri.inkomens._2019.inkomen * parameters["index2019"] + ink.bri.inkomens._2020.inkomen * parameters["index2020"]
+            
+            # 2019
+            if ink.bri.inkomens._2019 : 
+                ink2019 = ink.bri.inkomens._2019.inkomen * parameters["index2019"] 
+            else: ink2019 = 0.0
+            # 2020
+            if ink.bri.inkomens._2020 : 
+                ink2020 = ink.bri.inkomens._2020.inkomen * parameters["index2020"] 
+            else: ink2020 = 0.0
+            # 2021
+            if ink.bri.inkomens._2021 : 
+                ink2021 = ink.bri.inkomens._2021.inkomen * parameters["index2021"] 
+            else: ink2021 = 0.0
+            # 2022
+            if ink.bri.inkomens._2022 : 
+                ink2022 = ink.bri.inkomens._2022.inkomen * parameters["index2022"] 
+            else: ink2022 = 0.0
+            
+            # totaal
+            gezinsInks = gezinsInks + ink2019 + ink2020 + ink2021 + ink2022
         
             payload = {"voornamen": ink.brp.voornamen,
                        "voorvoegselGeslachtsnaam": ink.brp.voorvoegsel_geslachtsnaam,
@@ -217,6 +238,8 @@ def aedes_verhuurtoets_passendheidstoets_bri_segmenten_post(body):  # noqa: E501
     parameters = {
                 "index2019":   1.0523,
                 "index2020":   1.0248,
+                "index2021":   1.0248,
+                "index2022":   1.0248,
                 "aowLeeftijd": 796,
                 "lageAftoppingsgrens": 633.25,
                 "hogeAftoppingsgrens": 678.66,
@@ -259,7 +282,7 @@ def aedes_verhuurtoets_passendheidstoets_bri_segmenten_post(body):  # noqa: E501
 
 
         # aantal personen in huishouden
-        aantalPersonen = len(body.inkomens) + body._aantal_meeverhuizende_kinderen
+        aantalPersonen = len(inkomens) + body._aantal_meeverhuizende_kinderen
 
         # aow leeftijd in maanden
         lftd = 0
@@ -268,10 +291,29 @@ def aedes_verhuurtoets_passendheidstoets_bri_segmenten_post(body):  # noqa: E501
         # personen voor in response
         prsn = []
         gezinsInks = 0.0
-        for ink in body.inkomens:
+        for ink in inkomens:
             gbd = datetime.strptime(ink.brp.geboortedatum, '%Y%m%d')
             gbds.append((now.year - gbd.year) * 12 + (now.month - gbd.month))
-            gezinsInks = gezinsInks + ink.bri.inkomens._2019.inkomen * parameters["index2019"] + ink.bri.inkomens._2020.inkomen * parameters["index2020"]
+
+            # 2019
+            if ink.bri.inkomens._2019 : 
+                ink2019 = ink.bri.inkomens._2019.inkomen * parameters["index2019"] 
+            else: ink2019 = 0.0
+            # 2020
+            if ink.bri.inkomens._2020 : 
+                ink2020 = ink.bri.inkomens._2020.inkomen * parameters["index2020"] 
+            else: ink2020 = 0.0
+            # 2021
+            if ink.bri.inkomens._2021 : 
+                ink2021 = ink.bri.inkomens._2021.inkomen * parameters["index2021"] 
+            else: ink2021 = 0.0
+            # 2022
+            if ink.bri.inkomens._2022 : 
+                ink2022 = ink.bri.inkomens._2022.inkomen * parameters["index2022"] 
+            else: ink2022 = 0.0
+            
+            # totaal
+            gezinsInks = gezinsInks + ink2019 + ink2020 + ink2021 + ink2022
         
             payload = {"voornamen": ink.brp.voornamen,
                 "voorvoegselGeslachtsnaam": ink.brp.voorvoegsel_geslachtsnaam,

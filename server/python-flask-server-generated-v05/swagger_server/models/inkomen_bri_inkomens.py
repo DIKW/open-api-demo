@@ -15,7 +15,7 @@ class InkomenBriInkomens(Model):
 
     Do not edit the class manually.
     """
-    def __init__(self, _2019: InkomenBriInkomens2019=None, _2020: InkomenBriInkomens2019=None):  # noqa: E501
+    def __init__(self, _2019: InkomenBriInkomens2019=None, _2020: InkomenBriInkomens2019=None, _2021: InkomenBriInkomens2019=None, _2022: InkomenBriInkomens2019=None):  # noqa: E501
         """InkomenBriInkomens - a model defined in Swagger
 
         :param _2019: The _2019 of this InkomenBriInkomens.  # noqa: E501
@@ -25,15 +25,23 @@ class InkomenBriInkomens(Model):
         """
         self.swagger_types = {
             '_2019': InkomenBriInkomens2019,
-            '_2020': InkomenBriInkomens2019
+            '_2020': InkomenBriInkomens2019,
+            '_2021': InkomenBriInkomens2019,
+            '_2022': InkomenBriInkomens2019
         }
 
         self.attribute_map = {
             '_2019': '2019',
-            '_2020': '2020'
+            '_2020': '2020',
+            '_2021': '2021',
+            '_2022': '2022'
         }
         self.__2019 = _2019
         self.__2020 = _2020
+        self.__2021 = _2021
+        self.__2022 = _2022
+
+
 
     @classmethod
     def from_dict(cls, dikt) -> 'InkomenBriInkomens':
@@ -87,3 +95,45 @@ class InkomenBriInkomens(Model):
         """
 
         self.__2020 = _2020
+
+    @property
+    def _2021(self) -> InkomenBriInkomens2019:
+        """Gets the _2021 of this InkomenBriInkomens.
+
+
+        :return: The _2021 of this InkomenBriInkomens.
+        :rtype: InkomenBriInkomens2019
+        """
+        return self.__2021
+
+    @_2021.setter
+    def _2021(self, _2021: InkomenBriInkomens2019):
+        """Sets the _2021 of this InkomenBriInkomens.
+
+
+        :param _2021: The _2021 of this InkomenBriInkomens.
+        :type _2021: InkomenBriInkomens2019
+        """
+
+        self.__2021 = _2021
+
+    @property
+    def _2022(self) -> InkomenBriInkomens2019:
+        """Gets the _2022 of this InkomenBriInkomens.
+
+
+        :return: The _2022 of this InkomenBriInkomens.
+        :rtype: InkomenBriInkomens2019
+        """
+        return self.__2022
+
+    @_2022.setter
+    def _2022(self, _2022: InkomenBriInkomens2019):
+        """Sets the _2022 of this InkomenBriInkomens.
+
+
+        :param _2022: The _2022 of this InkomenBriInkomens.
+        :type _2022: InkomenBriInkomens2019
+        """
+
+        self.__2022 = _2022
